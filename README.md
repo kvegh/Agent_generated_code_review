@@ -42,10 +42,11 @@ All thirteen areas must be accounted for:
 | CI/CD and promotion | [cicd_and_promotion](https://github.com/redhat-cop/automation-good-practices/blob/fb5fcd6f03c544909dbad352a352b421c41d7203/cicd_and_promotion/README.adoc) |
 | Security | [security](https://github.com/redhat-cop/automation-good-practices/blob/fb5fcd6f03c544909dbad352a352b421c41d7203/security/README.adoc) |
 
-Use pass, fail, justified not applicable, or explicitly approved exception as
+Use pass, fixed, justified not applicable, accepted deviation, or unresolved as
 outcomes. Missing tooling or missing evidence means incomplete, not pass.
-An entire area must not disappear because a tool cannot check it. An exception
-must identify the rule, reason, impact, owner approval, and review condition.
+An entire area must not disappear because a tool cannot check it. Record
+deviations under the proportionality rule below, including any material decision
+requiring owner approval.
 
 Explicit owner requirements take precedence over external recommendations.
 Resolve conflicting or historical guidance against the actual supported AAP
@@ -54,6 +55,36 @@ obsolete control-node platforms does not establish a compatibility requirement
 for a current AAP EE. Keep short explanatory comments as required below.
 The owner-selected repository name is retained without renaming it to match a
 different naming convention in the guide.
+
+### Proportionate improvements and accepted deviations
+
+The goal is useful, reliable automation for its documented environment, with
+effort proportionate to benefit. **A successful review does not require 100%
+conformance or perfection.** Review every requirement, but do not spend huge
+amounts of effort on a change with little practical benefit or introduce extra
+complexity merely to satisfy a recommendation.
+
+For each finding, weigh the benefit to functionality, security, maintainability,
+readability, and speed against implementation effort, regression risk, added
+complexity, and ongoing maintenance. The reviewing agent may accept a low-impact
+deviation when correction is clearly disproportionate, documenting the reasoning
+under this owner-authorized policy. A separate human readability check or
+approval for every minor finding is not required. Material scope, architecture,
+security, or access-control decisions still require the owner's authorization.
+
+The dated review report must list each accepted deviation or known limitation:
+the affected requirement and code, practical impact, benefit of fixing it,
+estimated effort and regression/maintenance costs, reason for acceptance, and
+any condition that would make revisiting it worthwhile. State uncertainty rather
+than inventing precise estimates. Acceptance may be recorded as **accepted with
+documented deviations**. An accepted deviation is a resolved disposition, not a
+claim that the code conforms to the original recommendation.
+
+Required functionality must still be demonstrated by successful tests, including
+the final full AAP end-to-end test. Proportionality does not authorize exposing
+secrets, bypassing security/access controls, or presenting missing or failed
+mandatory test evidence as a successful review. Explicitly unsupported platforms
+are outside the declared scope rather than defects requiring implementation.
 
 ## 2. Red Hat development guidance and security references
 
@@ -123,6 +154,13 @@ dense expressions or the smallest possible line count. Use descriptive task,
 role, handler, and variable names; clear data types; straightforward conditions;
 and small files with a coherent purpose. Follow the guide's naming, formatting,
 variable, and interface rules throughout supporting code as well.
+
+**Assess readability and simplicity through agent review; human verification is
+not required.** Additional independent agents may review the same revision and
+confirm or challenge the assessment. Give them the relevant code, declared
+environment, and review criteria. Record the agents' review scopes, concrete
+findings, and resolution of disagreements. Do not describe agent consensus as
+human verification or as functional-test evidence.
 
 Keep playbooks easy to follow and roles focused. Remove duplication where it
 improves clarity. Avoid unnecessary wrappers, frameworks, configuration switches,
@@ -284,9 +322,10 @@ ansible-lint --profile production --strict
 
 Use a reproducible tooling environment compatible with the target AAP core and
 real collection dependencies. Review discovery/exclusion settings so files are
-not silently missed. Fix findings; keep exclusions narrow and explain every
-exception. Do not generate a blanket ignore list or disable rules merely to
-obtain a successful exit. Run appropriate checks for supporting languages too.
+not silently missed. Resolve findings by fixes or documented accepted deviations;
+keep exclusions narrow and explain every exception under the proportionality
+rule. Do not generate a blanket ignore list or disable rules merely to obtain a
+successful exit. Run appropriate checks for supporting languages too.
 [Ansible lint usage](https://docs.ansible.com/projects/lint/usage/).
 
 Use **APME (Ansible Policy & Modernization Engine)** in addition to linting.
@@ -334,7 +373,9 @@ complete workflow, supported scenarios, expected outcomes, smoke checks, and
 preservation checks before launching it. Verify the final user-visible result,
 actual job completion, and absence of unintended effects.
 
-Collect findings from the review and fix them in a coherent batch. **Multiple
+Collect findings from the review, assess proportionality, and fix the findings
+selected for correction in a coherent batch. Record accepted deviations and
+known limitations with their rationale. **Multiple
 findings may be corrected in one run; there is no requirement to restart the
 whole review after each individual finding or edit.** Track each finding and
 continue gathering findings where useful, stopping unsafe execution when needed.
@@ -361,14 +402,14 @@ running destructive workflows, or changing unrelated deployed systems.
 
 ```mermaid
 flowchart TD
-    A[Define scope, behavior, revisions and AAP runtime] --> B[Full CoP and manual review]
+    A[Define scope, behavior, revisions and AAP runtime] --> B[Full CoP and agent review]
     B --> C[Security, strict lint and APME]
     C --> D[Focused tests, smoke tests, idempotency and timings]
     D --> E[Check CaC and documentation; freeze acceptance revision]
     E --> F[Final complete AAP end-to-end test]
-    F --> G{All requirements passed?}
+    F --> G{Mandatory tests passed and findings resolved?}
     G -->|Yes| H[Create dated report in reviewed repository and accept tested revision]
-    G -->|No| I[Collect findings and fix a coherent batch]
+    G -->|No| I[Assess findings, record accepted deviations and fix a batch]
     I --> J[Run functionality and regression tests]
     J --> K{Functionality passed?}
     K -->|No: diagnose and fix| I
@@ -380,7 +421,8 @@ flowchart TD
 ```
 
 For every finding, record its file/location, practical consequence, rule/source,
-proposed correction, priority, verification, and final disposition. Resolve
+proposed correction, priority, verification, and final disposition, including
+cost/benefit reasoning for accepted deviations. Resolve
 functional and security failures before cosmetic improvements. Keep changes
 focused and preserve required functionality. Several findings may be fixed
 together before functionality testing and the next full review pass.
@@ -389,8 +431,9 @@ The review record must identify the exact source/CaC/secrets revisions, runtime
 versions, guide and policy versions, per-directive coverage, approved exceptions,
 commands/job references, results, deprecations, timings, and remaining gaps.
 Store sensitive evidence outside public code repositories and publish sanitized
-summaries only. Do not claim acceptance while any required check is missing,
-failed, or unverified. Existing unrelated work must remain untouched.
+summaries only. Account for each required check, any accepted deviation, and its
+decision basis; unresolved findings or missing mandatory test evidence prevent
+acceptance. Existing unrelated work must remain untouched.
 
 ### Successful review report in the reviewed repository
 
@@ -400,8 +443,10 @@ using the review completion date. For example, a review of the disconnected
 Windows project produces the report in that project's own repository. A report
 in this policy repository does not replace the reviewed project's report.
 
-Create the completed report after findings are fixed, functionality tests pass,
-and the restarted full review and final AAP end-to-end test succeed. Commit it
+Create the completed report after findings are fixed or accepted as documented
+deviations, functionality tests pass, and the full review and final AAP
+end-to-end test succeed. Corrected code must have completed the restarted review
+cycle described above. Commit it
 with the reviewed project's documentation and link it from that project's
 README. Identify the exact functional revision that passed; a later commit
 containing only the report must not obscure which executable content was tested.
@@ -409,20 +454,31 @@ containing only the report must not obscure which executable content was tested.
 The report must include:
 
 - Review scope, completion date, reviewer, policy/guide revisions, and the exact
-  source and runtime/dependency baseline reviewed.
+  source and runtime/dependency baseline reviewed. Identify agent review scopes
+  and any independent agent assessments of readability and simplicity.
+- The documented supported environment, explicit unsupported platforms, and
+  evidence that the documentation matches the implementation. A KVM-only
+  project, for example, must say so without implying VMware support.
 - Findings, their consequences, fixes and implementation commits, fix batches,
   and verification results. Record the final disposition of every finding.
 - CoP and other required coverage, tool/validator completion, functionality and
   regression tests, smoke/idempotency checks, and the final complete AAP
   end-to-end result, with sanitized evidence references and relevant timings.
+  Include an explicit **functionality confirmation: PASS**, identifying what was
+  tested, when, on which source/runtime revision and supported environment, and
+  the expected versus observed result. Job launch alone is not confirmation.
 - Any **contradictions between review approaches or guidance**. Identify the
   conflicting sources and requirements, the affected context, the chosen
   approach, the alternatives, and the reason for the choice. Explain how the
   decision preserves functionality and meets the supported AAP baseline,
   including verification and any required exception approval. If no conflicts
   were identified, say so explicitly.
-- Approved exceptions, limitations, and the final acceptance conclusion. Required
-  checks that remain failed, missing, or unverified prevent a successful review.
+- Accepted deviations, approved exceptions, and known limitations. Include the
+  benefit, effort, risk, and reason for leaving each accepted incompatibility or
+  guideline deviation in place, plus any condition for revisiting it.
+- The final acceptance conclusion, either accepted or accepted with documented
+  deviations. Missing or failed mandatory functionality/end-to-end test evidence
+  and unresolved findings prevent a successful review.
 
 Keep the report sanitized under the sensitive-configuration rules above. Put
 raw sensitive evidence in protected external storage and reference only safe
@@ -433,6 +489,13 @@ summaries from the committed report. Preserve previous completed review reports.
 Maintain a current README and `design_decisions_history.md` for every project.
 Explain purpose, prerequisites, dependencies, inputs/outputs, AAP/CaC setup,
 execution, tests, expected results, troubleshooting, recovery, and limitations.
+Check documentation against the codebase for accuracy and sufficient detail to
+set up, run, test, and recover the project in its supported environment. State
+the environment it was built for, supported hypervisor/platform and versions,
+AAP/EE baseline, prerequisites, assumptions, and explicit exclusions. For a
+KVM-only implementation, document KVM support and that VMware is unsupported;
+the review does not require adding another hypervisor. Treat unsupported and
+untested claims distinctly. Assess adequacy and usefulness, not document length.
 Record reasons and implementation commit IDs in the decision history; keep
 patches and secrets out of it. Update documentation with implementation changes.
 

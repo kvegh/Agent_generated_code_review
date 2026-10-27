@@ -6,12 +6,18 @@ and apply every directive, recording evidence or a justified disposition.
 This overview does not replace either document.
 
 - **Correct behavior:** define the required outcome and preserve it during cleanup.
+- **Proportionality:** aim for useful, reliable automation rather than 100%
+  perfection. Fix findings where benefit justifies effort and risk. Record
+  low-impact accepted deviations and known limitations with their reasons;
+  mandatory functionality/end-to-end tests must still pass.
 - **AAP baseline:** use the current AAP-provided ansible-core in the selected
   supported EE. Verify the actual runtime and record immutable image/dependency
   versions. Resolve all reported deprecations; keep warnings enabled.
 - **Readability and simplicity:** clear names and flow, small coherent units,
   straightforward expressions, and no overengineering or code-density goals.
-  Keep comments short; explain the reason, goal, and solution.
+  Agents assess this; human verification is not required. Additional independent
+  agents may confirm or challenge findings. Keep comments short; explain the
+  reason, goal, and solution.
 - **Native Ansible:** prefer suitable native modules/roles over URI calls and
   external scripts. MCP calls are acceptable. Explain necessary alternatives.
 - **Certified content:** use certified collections wherever possible. Explain
@@ -44,20 +50,25 @@ This overview does not replace either document.
 - **Tests:** create smoke tests after provisioning; verify behavior, idempotency,
   relevant failure/recovery cases, and supported scenarios.
 - **Final test:** always finish functional acceptance with the complete AAP
-  end-to-end test. Fix findings in batches; multiple findings may be corrected
-  in one run. After the batch, run functionality and regression tests, fixing
-  and retesting until they pass. Then restart the **whole review procedure**,
-  including the complete final end-to-end test.
+  end-to-end test. Assess findings and record accepted deviations; fix the
+  selected findings in batches. After the batch, run functionality and regression
+  tests, fixing and retesting until they pass. Then restart the **whole review
+  procedure**, including the complete final end-to-end test.
 - **Documentation:** keep the README, decision history, and TLDR current. Complex
-  workflows need a maintained visual process overview on GitHub Pages.
+  workflows need a maintained visual process overview on GitHub Pages. Check
+  documentation against the code and state its supported environment and
+  exclusions, such as KVM support without VMware support.
 - **Review report:** after a successful review, create `Code_Review_YYYY-MM-DD.md`
   in the reviewed repository and link it from that project's README. Record
-  findings/fixes, tested revisions, coverage and test results, and any conflicting
-  review guidance, the chosen approach, and the reason for that choice.
+  findings/fixes, accepted deviations and cost/benefit reasons, tested revisions,
+  supported environment, and explicit functionality-test confirmation. Include
+  coverage, agent assessments, test results, and conflicting review guidance,
+  the chosen approach, and the reason for that choice.
 
-Review → collect findings → fix a batch → functionality tests → restart the
-full review → final full AAP end-to-end test → write the report in the reviewed
-repository and accept the exact tested revision.
+Review → assess findings → record accepted deviations and fix a batch →
+functionality tests → restart the full review → final full AAP end-to-end test →
+write the report in the reviewed repository and accept the exact tested revision,
+with documented deviations where applicable.
 Failed functionality tests stay in the fix-and-test cycle until they pass.
 Do not restart the complete review after each individual finding or edit.
 
