@@ -334,12 +334,22 @@ complete workflow, supported scenarios, expected outcomes, smoke checks, and
 preservation checks before launching it. Verify the final user-visible result,
 actual job completion, and absence of unintended effects.
 
-If the end-to-end test fails, diagnose the actual failure and restore the
-required functionality. After any corrective change, **restart the entire code
-review procedure from the beginning**, including all checks and the final full
-end-to-end test. A successful rerun of only the failed stage cannot close the
-review. Apply the same restart rule to earlier review findings that cause code,
-dependency, EE, runtime-configuration, or test/acceptance changes.
+Collect findings from the review and fix them in a coherent batch. **Multiple
+findings may be corrected in one run; there is no requirement to restart the
+whole review after each individual finding or edit.** Track each finding and
+continue gathering findings where useful, stopping unsafe execution when needed.
+
+After applying the batch, run functionality tests covering the corrected behavior
+and relevant regressions. If those tests fail, diagnose and fix the failures and
+repeat the functionality tests. Once functionality passes, **restart the entire
+code review procedure from the beginning** on the corrected revision, including
+all checks and the final complete AAP end-to-end test.
+
+Use this same fix-batch, functionality-test, and full-review cycle when the final
+end-to-end test fails or findings require changes to code, dependencies, EEs,
+runtime configuration, or tests/acceptance criteria. A successful rerun of only
+the failed stage verifies the repair but cannot close the review; the restarted
+review must still finish with the complete end-to-end test.
 
 Acceptance applies to the exact tested revisions and dependency/EE baseline.
 Recording evidence afterward must not change that tested artifact. If required
@@ -358,18 +368,22 @@ flowchart TD
     E --> F[Final complete AAP end-to-end test]
     F --> G{All requirements passed?}
     G -->|Yes| H[Record evidence and accept tested revision]
-    G -->|No| I[Diagnose and fix functionality]
-    I --> A
-    B -->|Correction needed| I
-    C -->|Correction needed| I
-    D -->|Correction needed| I
-    E -->|Correction needed| I
+    G -->|No| I[Collect findings and fix a coherent batch]
+    I --> J[Run functionality and regression tests]
+    J --> K{Functionality passed?}
+    K -->|No: diagnose and fix| I
+    K -->|Yes: restart full review| A
+    B -->|Findings ready for a fix batch| I
+    C -->|Findings ready for a fix batch| I
+    D -->|Findings ready for a fix batch| I
+    E -->|Findings ready for a fix batch| I
 ```
 
 For every finding, record its file/location, practical consequence, rule/source,
 proposed correction, priority, verification, and final disposition. Resolve
 functional and security failures before cosmetic improvements. Keep changes
-focused and preserve required functionality.
+focused and preserve required functionality. Several findings may be fixed
+together before functionality testing and the next full review pass.
 
 The review record must identify the exact source/CaC/secrets revisions, runtime
 versions, guide and policy versions, per-directive coverage, approved exceptions,

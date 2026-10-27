@@ -44,13 +44,17 @@ This overview does not replace either document.
 - **Tests:** create smoke tests after provisioning; verify behavior, idempotency,
   relevant failure/recovery cases, and supported scenarios.
 - **Final test:** always finish functional acceptance with the complete AAP
-  end-to-end test. If a correction is needed, fix it and restart the **whole
-  review procedure**, including the complete final end-to-end test.
+  end-to-end test. Fix findings in batches; multiple findings may be corrected
+  in one run. After the batch, run functionality and regression tests, fixing
+  and retesting until they pass. Then restart the **whole review procedure**,
+  including the complete final end-to-end test.
 - **Documentation:** keep the README, decision history, and TLDR current. Complex
   workflows need a maintained visual process overview on GitHub Pages.
 
-Review and fix → verify all requirements → final full AAP end-to-end test →
-accept the exact tested revision. Any corrective change restarts that sequence.
+Review → collect findings → fix a batch → functionality tests → restart the
+full review → final full AAP end-to-end test → accept the exact tested revision.
+Failed functionality tests stay in the fix-and-test cycle until they pass.
+Do not restart the complete review after each individual finding or edit.
 
 Review requirements do not authorize destructive tests or unrelated environment
 changes. Sensitive evidence stays outside public repositories. No project has
