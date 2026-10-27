@@ -531,6 +531,22 @@ The report must include:
 - The final acceptance conclusion, either accepted or accepted with documented
   deviations. Missing or failed mandatory functionality/end-to-end test evidence
   and unresolved findings prevent a successful review.
+- **Recommendations and future improvements**, including opportunities for a
+  justified custom Ansible module or collection, replacement of supporting code
+  with suitable native content, or useful additional code-checking tools. For
+  each suggestion, state the gap it addresses, expected practical benefit,
+  estimated effort, dependencies, maintenance/regression costs, and proposed
+  priority. Explain whether it is needed for the current acceptance scope or is
+  optional future work. Check existing certified content before recommending a
+  custom module, and compare the coverage of a proposed tool with checks already
+  performed. Record tools actually used separately from tools merely suggested.
+
+Optional recommendations do not prevent successful review when the accepted
+scope, mandatory tests, and documented dispositions are satisfied. Keep
+suggestions proportionate; creating a module, adding tooling, or expanding scope
+is a separate implementation decision, not an automatic consequence of listing
+it in the report. Obtain any installation or material-design approval required
+by the existing workspace rules before acting on a recommendation.
 
 Keep the report sanitized under the sensitive-configuration rules above. Put
 raw sensitive evidence in protected external storage and reference only safe

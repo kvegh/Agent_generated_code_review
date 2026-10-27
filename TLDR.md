@@ -74,6 +74,10 @@ This overview does not replace either document.
   project scope and coverage limits, and explicit functionality-test confirmation.
   Include coverage, agent assessments, test results, and conflicting review guidance,
   the chosen approach, and the reason for that choice.
+- **Recommendations:** include proportionate suggestions in the review report,
+  such as a justified custom Ansible module or an additional checking tool.
+  Explain the gap, benefit, effort, trade-offs, and priority. Distinguish required
+  fixes from optional future improvements and tools used from tools suggested.
 
 Review → assess findings → record accepted deviations and fix a batch →
 functionality tests → restart the full review → final full AAP end-to-end test →
