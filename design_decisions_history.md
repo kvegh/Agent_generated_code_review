@@ -3,6 +3,25 @@
 This document records significant decisions, their rationale, and the commits
 that implement them.
 
+## Require evidence and prohibit invented review findings
+
+Implementation commit: `a12bae9`.
+
+The owner clarified that agents can assume there must be issues when instructed
+to find or fix them. The review policy now explicitly prohibits inventing or
+exaggerating findings to generate changes or appear productive. No significant
+findings is a valid outcome after the required review and tests.
+
+Findings must identify the affected code, applicable requirement, supporting
+evidence, and practical impact within the declared scope. Distinguish confirmed
+defects, policy deviations, optional ideas, and unverified concerns. Validate tool
+warnings, explain false positives, and preserve working code when changing it
+has no worthwhile benefit. Mandatory checks and honest reporting of real issues
+or missing evidence remain required.
+
+The README and TLDR were updated and whitespace checks passed. This change adds
+review instructions; it does not establish findings or acceptance for any project.
+
 ## Make each project's naming conventions an explicit review criterion
 
 Implementation commit: `9f8c1ce`.
