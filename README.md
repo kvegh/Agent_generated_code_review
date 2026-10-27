@@ -1,17 +1,410 @@
 # Agent-generated code review
 
-This repository will define the rules for reviewing AI agent-generated Ansible
-code in the projects linked from AAP Advanced Features.
+These are the review requirements for AI agent-generated Ansible automation in
+the projects linked from AAP Advanced Features. They also cover supporting
+Python, PowerShell, shell, Jinja, dependency definitions, execution environments
+(EEs), and AAP configuration.
 
-## Review rules
+Start with [TLDR.md](TLDR.md) for a quick overview. This README is the full local
+policy; the complete upstream CoP guide remains part of the review baseline.
 
-To be formulated with the repository owner. No review rules have been agreed or
-implemented yet.
+This change documents requirements. It does not install tools, configure CI,
+alter deployed systems, or certify that existing projects meet the requirements.
+Repository reviews start separately, with an explicit project and test scope.
+
+## 1. Review baseline and complete CoP coverage
+
+Follow the **whole** [Red Hat Ansible CoP Good Practices guide](https://redhat-cop.github.io/automation-good-practices/),
+including its explanations, qualifications, and examples. A short checklist or
+an automated scan does not replace reading and applying the guide.
+
+The initial reference is upstream commit
+[`fb5fcd6`](https://github.com/redhat-cop/automation-good-practices/tree/fb5fcd6f03c544909dbad352a352b421c41d7203).
+At the start of each review, check upstream changes and record the exact guide
+revision used. Review every directive, including rules expressed as bullets
+within sections. Record a source location, outcome, and evidence for each one.
+
+All thirteen areas must be accounted for:
+
+| Area | Upstream source |
+|---|---|
+| Automation structures | [structures](https://github.com/redhat-cop/automation-good-practices/blob/fb5fcd6f03c544909dbad352a352b421c41d7203/structures/README.adoc) |
+| Naming conventions | [naming_conventions](https://github.com/redhat-cop/automation-good-practices/blob/fb5fcd6f03c544909dbad352a352b421c41d7203/naming_conventions/README.adoc) |
+| Roles | [roles](https://github.com/redhat-cop/automation-good-practices/blob/fb5fcd6f03c544909dbad352a352b421c41d7203/roles/README.adoc) |
+| Collections | [collections](https://github.com/redhat-cop/automation-good-practices/blob/fb5fcd6f03c544909dbad352a352b421c41d7203/collections/README.adoc) |
+| Playbooks | [playbooks](https://github.com/redhat-cop/automation-good-practices/blob/fb5fcd6f03c544909dbad352a352b421c41d7203/playbooks/README.adoc) |
+| Inventories and variables | [inventories](https://github.com/redhat-cop/automation-good-practices/blob/fb5fcd6f03c544909dbad352a352b421c41d7203/inventories/README.adoc) |
+| Plugins | [plugins](https://github.com/redhat-cop/automation-good-practices/blob/fb5fcd6f03c544909dbad352a352b421c41d7203/plugins/README.adoc) |
+| Coding style | [coding_style](https://github.com/redhat-cop/automation-good-practices/blob/fb5fcd6f03c544909dbad352a352b421c41d7203/coding_style/README.adoc) |
+| AAP configuration as code | [aap_configuration](https://github.com/redhat-cop/automation-good-practices/blob/fb5fcd6f03c544909dbad352a352b421c41d7203/aap_configuration/README.adoc) |
+| Git workflow and versioning | [git_workflow](https://github.com/redhat-cop/automation-good-practices/blob/fb5fcd6f03c544909dbad352a352b421c41d7203/git_workflow/README.adoc) |
+| Testing | [testing](https://github.com/redhat-cop/automation-good-practices/blob/fb5fcd6f03c544909dbad352a352b421c41d7203/testing/README.adoc) |
+| CI/CD and promotion | [cicd_and_promotion](https://github.com/redhat-cop/automation-good-practices/blob/fb5fcd6f03c544909dbad352a352b421c41d7203/cicd_and_promotion/README.adoc) |
+| Security | [security](https://github.com/redhat-cop/automation-good-practices/blob/fb5fcd6f03c544909dbad352a352b421c41d7203/security/README.adoc) |
+
+Use pass, fail, justified not applicable, or explicitly approved exception as
+outcomes. Missing tooling or missing evidence means incomplete, not pass.
+An entire area must not disappear because a tool cannot check it. An exception
+must identify the rule, reason, impact, owner approval, and review condition.
+
+Explicit owner requirements take precedence over external recommendations.
+Resolve conflicting or historical guidance against the actual supported AAP
+runtime and document the resolution. For example, guidance specifically about
+obsolete control-node platforms does not establish a compatibility requirement
+for a current AAP EE. Keep short explanatory comments as required below.
+The owner-selected repository name is retained without renaming it to match a
+different naming convention in the guide.
+
+## 2. Red Hat development guidance and security references
+
+Use the documentation for the deployed AAP release. For the current AAP 2.7
+baseline, the [Develop guide](https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.7/pdfs/aap-develop-2-7-pdf.pdf)
+is our product content-development reference. The locally supplied edition is
+dated July 21, 2026; the following are its printed page numbers:
+
+| Pages | Development reference |
+|---|---|
+| 39–50 | Development tools, create/test/deploy workflow, SCM, and AAP execution |
+| 51–59 | Role and collection development, documentation, PAH publication, and EE consumption |
+| 66–89 | Local execution and inspection with automation content navigator |
+| 311–313 | Execution practices, dependency declaration, inventory, and CI/CD |
+| 314 onward | Execution environment definitions and building |
+
+Read the relevant procedures in full for the content under review. Use the
+[Secure guide](https://docs.redhat.com/en/documentation/red_hat_ansible_automation_platform/2.7/pdfs/aap-secure-2-7-pdf.pdf)
+and applicable Red Hat product documentation for security, supported
+configuration, and deployment decisions. Record differences between the local
+documentation edition, current vendor guidance, and the deployed runtime.
+
+Review security-relevant configuration against the appropriate
+[CIS Benchmark](https://www.cisecurity.org/cis-benchmarks). Select the target
+product, benchmark version, profile, and applicable controls before assessing
+it. Record control-specific findings and exceptions. A generic code scan cannot
+establish host compliance. CIS recommends testing benchmark settings before
+deployment; profile selection must account for functionality and support.
+[CIS profile guidance](https://www.cisecurity.org/cis-benchmarks/cis-benchmarks-faq).
+
+Useful additional references to adopt where relevant are
+[OpenSCAP with SCAP Security Guide](https://www.open-scap.org/security-policies/scap-security-guide/)
+for runtime configuration assessment and
+[NIST SSDF](https://csrc.nist.gov/pubs/sp/800/218/final) for development and
+software supply-chain practices. These are proposed supporting references;
+specific profiles, tools, and enforcement settings need to be selected per
+project. DISA STIG or other compliance frameworks apply when explicitly
+required. Do not introduce conflicting hardening settings merely to collect
+more framework names.
+
+## 3. Current AAP runtime and no deprecated features
+
+Build all automation on the **current AAP-provided ansible-core version** for
+the selected, supported AAP execution environment. Determine the actual version
+inside that EE; a local CLI version or an image name is insufficient evidence.
+Record AAP version, EE image digest, ansible-core, Python, and collection versions
+in the review evidence. Reassess this baseline when AAP or its EE is updated.
+
+Use that baseline for syntax checks, module documentation, argument validation,
+lint compatibility, APME scans, and execution tests. Additional developer tools
+may run separately, but must not silently change the target runtime. Do not
+upgrade ansible-core independently to the newest upstream release or downgrade
+it to retain obsolete code.
+
+Do not use deprecated modules, parameters, syntax, configuration, or features.
+Keep deprecation warnings enabled and investigate every reported deprecation.
+Use supported replacements compatible with the AAP baseline and rerun the
+review procedure. If a third-party dependency causes a warning, resolve its
+version or replacement; an unresolved warning blocks acceptance. Hiding warnings
+does not fix a deprecation.
+[Ansible deprecation-warning setting](https://docs.ansible.com/projects/ansible/latest/reference_appendices/config.html#deprecation-warnings).
+
+## 4. Readability, simplicity, and comments
+
+Readability is a primary acceptance criterion. Prefer simple, explicit code to
+dense expressions or the smallest possible line count. Use descriptive task,
+role, handler, and variable names; clear data types; straightforward conditions;
+and small files with a coherent purpose. Follow the guide's naming, formatting,
+variable, and interface rules throughout supporting code as well.
+
+Keep playbooks easy to follow and roles focused. Remove duplication where it
+improves clarity. Avoid unnecessary wrappers, frameworks, configuration switches,
+fallback chains, nested logic, and speculative future features. Each check,
+abstraction, and recovery path must serve an identifiable requirement.
+
+Comment for clarity: briefly explain the **reason, goal, and chosen solution**
+for significant logic and non-obvious decisions. Keep comments short and current.
+Use task names to explain routine actions. Explain necessary direct API calls,
+external scripts, non-idempotent operations, and unusual safeguards next to the
+relevant code. Include the reason a simpler native approach is insufficient.
+
+## 5. Native Ansible and collection selection
+
+Use native Ansible capabilities and suitable modules or roles wherever possible
+instead of `ansible.builtin.uri`, shell commands, or external scripts. Use FQCNs.
+Verify real module interfaces and return values for the exact installed version.
+
+Use **certified collections wherever possible**, including checking suitability,
+support status, AAP/core compatibility, required dependencies, and availability
+through private automation hub. If a certified option cannot meet the need,
+explain the gap before choosing validated content, maintained community content,
+or custom code. Collection certification does not replace functional testing.
+
+MCP calls are acceptable. Agents should prefer available MCP tools for platform
+operations. If automation itself needs MCP, declare and reproduce its runtime,
+credentials, permissions, and failure handling. A necessary direct API call or
+script must have a documented reason and remain small, testable, and protected.
+
+## 6. Idempotency, failure handling, and recovery
+
+Avoid non-idempotent modules and code whenever an idempotent solution exists.
+Test the same desired state twice and verify that the second application causes
+no unintended change. Check the actual state as well as reported change counts.
+Setting `changed_when: false` alone does not make an operation idempotent.
+
+Use handlers for appropriate change-triggered work. Support check mode where
+possible and document genuine limitations. Read-only checks must remain
+read-only, including those deliberately executed during check mode.
+
+Review partial completion, retries, timeouts, asynchronous completion, recovery,
+and temporary-resource cleanup. Failure messages must be useful and sanitized.
+Do not hide errors through blanket `ignore_errors`, unconditional success, or
+rescue blocks that lose the original failure. Await and inspect external jobs.
+
+Where a one-time or inherently changing operation is necessary, explain why,
+guard its execution, report changes honestly, and test its repeat/recovery
+behavior. Preserve required behavior and unrelated resources during cleanup.
+
+## 7. Credentials and sensitive configuration outside code
+
+Keep all sensitive values outside reusable code: tokens, usernames, passwords,
+keys, hostnames, IP addresses, private endpoints, and environment-specific
+security configuration. This covers templates, inventories, examples, tests,
+documentation, exports, logs, generated files, and Git history.
+
+Use AAP credentials, an approved external secret manager, or the project's
+separate private secrets repository. Sensitive files committed to that secrets
+repository must be Ansible Vault-encrypted. A private repository alone does not
+protect plaintext values. Keep Vault passwords and decryption keys outside Git.
+Public code contains variable references and generic placeholders only.
+
+Protect task output, diffs, temporary files, artifacts, API responses, command
+arguments, and cleanup paths. Keep diagnostic logging protected by default.
+Retain TLS verification, least privilege, resource ownership checks, and explicit
+target limits. Review secret rotation, revocation, RBAC, source/dependency
+provenance, vulnerability findings, and image/SBOM evidence under the full CoP
+security requirements. Never change access controls to make a test pass.
+
+## 8. Private automation hub and custom collections
+
+Use **private automation hub (PAH)** as the approved Ansible content store.
+Declare exact collection versions in requirements and resolve them through PAH.
+Prepare the required content there before project synchronization or EE builds.
+Keep hub endpoints and access values in external protected configuration.
+
+Do not vendor downloaded or installed collections, collection archives, or
+`ansible_collections/` trees into playbook project repositories. Requirement
+manifests and EE build definitions belong in Git; installed content and release
+artifacts belong in the content store.
+
+Custom collection **source may live in its own development repository**, as
+confirmed by the owner. Explain the missing capability, why existing certified
+or other maintained content is insufficient, the collection's interface,
+ownership, tests, supported runtime, dependencies, and release process.
+Publish versioned releases to PAH and consume them from PAH. Avoid copying their
+implementation into consuming projects or downloading it directly from Git at
+job runtime.
+
+## 9. AAP execution and execution environments
+
+Verify actual execution through normal AAP job templates and workflows. Review
+inventory selection, limits, surveys, credentials, extra-variable precedence,
+SCM revision, workflow dependencies, RBAC, timeouts, and concurrent execution.
+The automation must run unattended without workstation paths, interactive
+prompts, or files borrowed from another AAP project checkout.
+
+Use AAP-provided EEs wherever they meet the requirements. Use the same EE
+baseline during development verification and AAP execution. Record immutable
+image/dependency references for acceptance and promotion.
+
+When a custom EE is necessary, explain the need and provide:
+
+- A version-controlled `execution-environment.yml` using the applicable supported
+  Ansible Builder schema, based on an AAP-provided image and its core version.
+- Exact collection requirements served by PAH, plus any Python requirements,
+  system package requirements, and justified additional build steps.
+- Reproducible build instructions, for example `ansible-builder build -f
+  execution-environment.yml -t <image-reference>`, with tool versions and
+  externally supplied registry/hub credentials and CA trust.
+- Instructions for scanning, inspecting the resulting runtime, publishing the
+  image to PAH's registry, registering it in AAP through CaC, and selecting it
+  on the relevant templates. Record its digest and a rebuild/upgrade procedure.
+
+Do not install dependencies interactively during ordinary job execution to
+compensate for an incomplete EE definition.
+
+## 10. Every project must be CaCable
+
+Every created Ansible code project must be reproducible through configuration
+as code (CaC). This requirement does **not** prescribe moving project source
+into a central CaC repository or changing the existing repository layout.
+
+Represent all required AAP objects and relationships reproducibly: projects,
+SCM revisions, inventories and sources, credential types and attachments, EEs,
+job templates, surveys, workflow nodes and links, relevant RBAC, and any required
+schedules or settings. Keep their sensitive values in the protected stores
+described above. Use suitable native configuration collections.
+
+Document external/bootstrap prerequisites, ownership boundaries, import order,
+and the entry point for restoration. Verify reconstruction and a repeated apply
+on an authorized test platform. An export or a collection of API screenshots
+alone does not prove that a project can be restored and run. Configuration
+import must not implicitly launch runtime automation or enable unrequested
+schedules. Keep temporary troubleshooting changes aligned with the CaC source.
+
+## 11. Speed and proportionate verification
+
+Speed is an explicit review criterion. Use actual AAP job/task timings to find
+slow stages and compare equivalent before/after runs. Examine repeated fact
+gathering, API queries, hashing, transfers, package loops, fixed sleeps, polling,
+and unnecessary serial execution. Use native batching and safe parallelism when
+they improve measured behavior without races or resource contention.
+
+Keep development feedback fast by running inexpensive checks first and focused
+tests during diagnosis. Remove redundant verification when another check already
+proves the same property at the same trust boundary. Preserve required safety,
+integrity, and completion checks. The final full end-to-end test is mandatory,
+even when it is slow.
+
+## 12. Strict linting and APME
+
+Run strict Ansible linting across all Ansible content, including roles, task
+files, handlers, examples, and tests. The default acceptance command is:
+
+```sh
+ansible-lint --profile production --strict
+```
+
+Use a reproducible tooling environment compatible with the target AAP core and
+real collection dependencies. Review discovery/exclusion settings so files are
+not silently missed. Fix findings; keep exclusions narrow and explain every
+exception. Do not generate a blanket ignore list or disable rules merely to
+obtain a successful exit. Run appropriate checks for supporting languages too.
+[Ansible lint usage](https://docs.ansible.com/projects/lint/usage/).
+
+Use **APME (Ansible Policy & Modernization Engine)** in addition to linting.
+Its upstream [architecture](https://github.com/ansible/apme/blob/9c4372f79a8b537865040cea17cf9db7659614ad/docs/architecture/06-validator-fanout.md)
+describes these validator backends:
+
+| Backend | Review contribution |
+|---|---|
+| Native | Static structure, risk, and modernization checks |
+| OPA / Rego | Policy evaluation |
+| Ansible | Core-version and module-interface compatibility checks |
+| Gitleaks | Secret detection |
+| Collection Health | Findings in collection dependencies |
+| Dependency Audit | Known Python dependency vulnerabilities |
+
+Record APME version, target core, policy/rule revisions, enabled validators,
+health, completion status, and findings. Some validators are optional and
+unconfigured validators are skipped; require evidence that each required backend
+actually completed. Missing or failed coverage cannot count as a clean result.
+Keep scans and dependency resolution within approved source and data boundaries.
+
+APME supplements both `ansible-lint` and runtime tests. It does not establish
+functional correctness or CIS compliance. Custom policy mappings need explicit
+implementation and verification. The initial upstream assessment used commit
+[`9c4372f`](https://github.com/ansible/apme/tree/9c4372f79a8b537865040cea17cf9db7659614ad).
+Backend deployment and project-specific policy selection remain setup work;
+this repository does not yet provide an installed review service or CI pipeline.
+Use existing tools and obtain approval before installing missing dependencies.
+
+## 13. Smoke tests and final end-to-end acceptance
+
+Create smoke tests after provisioning. They must quickly verify the essential
+service or integration behavior, required connectivity, and readiness for the
+next stage. A successful provisioning task or a running process alone is
+insufficient. Keep smoke tests focused, repeatable, and safe.
+
+Use meaningful unit, role, integration, failure/recovery, and idempotency tests
+as required by the full guide and the project's behavior. Tests should exercise
+outcomes and relevant failure cases. Run applicable supported-platform scenarios
+and document their actual coverage.
+
+**The last acceptance test for functional code or runtime configuration is
+always a complete end-to-end test through AAP.** Define its starting state,
+complete workflow, supported scenarios, expected outcomes, smoke checks, and
+preservation checks before launching it. Verify the final user-visible result,
+actual job completion, and absence of unintended effects.
+
+If the end-to-end test fails, diagnose the actual failure and restore the
+required functionality. After any corrective change, **restart the entire code
+review procedure from the beginning**, including all checks and the final full
+end-to-end test. A successful rerun of only the failed stage cannot close the
+review. Apply the same restart rule to earlier review findings that cause code,
+dependency, EE, runtime-configuration, or test/acceptance changes.
+
+Acceptance applies to the exact tested revisions and dependency/EE baseline.
+Recording evidence afterward must not change that tested artifact. If required
+access or an authorized test environment is unavailable, report the review as
+incomplete. This policy does not authorize deleting existing environments,
+running destructive workflows, or changing unrelated deployed systems.
+
+## 14. Review procedure and evidence
+
+```mermaid
+flowchart TD
+    A[Define scope, behavior, revisions and AAP runtime] --> B[Full CoP and manual review]
+    B --> C[Security, strict lint and APME]
+    C --> D[Focused tests, smoke tests, idempotency and timings]
+    D --> E[Check CaC and documentation; freeze acceptance revision]
+    E --> F[Final complete AAP end-to-end test]
+    F --> G{All requirements passed?}
+    G -->|Yes| H[Record evidence and accept tested revision]
+    G -->|No| I[Diagnose and fix functionality]
+    I --> A
+    B -->|Correction needed| I
+    C -->|Correction needed| I
+    D -->|Correction needed| I
+    E -->|Correction needed| I
+```
+
+For every finding, record its file/location, practical consequence, rule/source,
+proposed correction, priority, verification, and final disposition. Resolve
+functional and security failures before cosmetic improvements. Keep changes
+focused and preserve required functionality.
+
+The review record must identify the exact source/CaC/secrets revisions, runtime
+versions, guide and policy versions, per-directive coverage, approved exceptions,
+commands/job references, results, deprecations, timings, and remaining gaps.
+Store sensitive evidence outside public code repositories and publish sanitized
+summaries only. Do not claim acceptance while any required check is missing,
+failed, or unverified. Existing unrelated work must remain untouched.
+
+## 15. Documentation and process overview
+
+Maintain a current README and `design_decisions_history.md` for every project.
+Explain purpose, prerequisites, dependencies, inputs/outputs, AAP/CaC setup,
+execution, tests, expected results, troubleshooting, recovery, and limitations.
+Record reasons and implementation commit IDs in the decision history; keep
+patches and secrets out of it. Update documentation with implementation changes.
+
+Provide a separate **TLDR document** for a quick overview, linked from the README.
+It must stay consistent with the detailed documentation and preserve essential
+prerequisites and cautions. Role and collection interfaces need their own
+appropriate documentation.
+
+When documentation or workflows are complex, provide a visual process overview
+on **GitHub Pages (`github.io`)**, following the approach used by the disconnected
+Windows demo. Show stages, dependencies, inputs, success conditions, and recovery
+entry points. Keep diagrams sourced and maintained with the implementation and
+link between the README, TLDR, and process overview. Public documentation must
+use generic placeholders and sanitized results.
 
 ## Repository layout
 
-- `README.md`: the review rules and their scope.
-- `design_decisions_history.md`: significant decisions and their implementation
-  commit references.
+- `README.md`: the full review requirements and authoritative local procedure.
+- `TLDR.md`: the quick overview.
+- `design_decisions_history.md`: decisions, reasons, and implementation commits.
 
-No review tooling, dependencies, or automated checks are configured yet.
+There is no executable automation in this policy repository yet. Validate
+documentation changes for consistency, links, formatting, and sensitive data.
+Functional end-to-end acceptance applies when reviewing executable project
+content; documentation validation alone does not qualify any project as reviewed.
