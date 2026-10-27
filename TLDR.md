@@ -10,6 +10,10 @@ This overview does not replace either document.
   perfection. Fix findings where benefit justifies effort and risk. Record
   low-impact accepted deviations and known limitations with their reasons;
   mandatory functionality/end-to-end tests must still pass.
+- **Project scope and test limits:** define each project's intended use and
+  verify it using the available test environment. Universal platform support,
+  every possible scenario, and 100% test coverage are not required. Document
+  actual coverage, exclusions, untested cases, and accepted gaps with their risks.
 - **AAP baseline:** use the current AAP-provided ansible-core in the selected
   supported EE. Verify the actual runtime and record immutable image/dependency
   versions. Resolve all reported deprecations; keep warnings enabled.
@@ -48,21 +52,23 @@ This overview does not replace either document.
   guidance and applicable CIS controls. Select benchmark/profile explicitly.
   OpenSCAP and NIST SSDF are proposed supporting references where relevant.
 - **Tests:** create smoke tests after provisioning; verify behavior, idempotency,
-  relevant failure/recovery cases, and supported scenarios.
+  and relevant failure/recovery scenarios within the declared scope and available
+  test environment. Record the evidence and coverage limits.
 - **Final test:** always finish functional acceptance with the complete AAP
-  end-to-end test. Assess findings and record accepted deviations; fix the
-  selected findings in batches. After the batch, run functionality and regression
+  end-to-end test within that scope and test environment. Assess findings and
+  record accepted deviations; fix the selected findings in batches. After the
+  batch, run functionality and regression
   tests, fixing and retesting until they pass. Then restart the **whole review
   procedure**, including the complete final end-to-end test.
 - **Documentation:** keep the README, decision history, and TLDR current. Complex
   workflows need a maintained visual process overview on GitHub Pages. Check
-  documentation against the code and state its supported environment and
-  exclusions, such as KVM support without VMware support.
+  documentation against the code and distinguish intended scope, verified
+  environments/scenarios, untested cases, exclusions, and testing limitations.
 - **Review report:** after a successful review, create `Code_Review_YYYY-MM-DD.md`
   in the reviewed repository and link it from that project's README. Record
   findings/fixes, accepted deviations and cost/benefit reasons, tested revisions,
-  supported environment, and explicit functionality-test confirmation. Include
-  coverage, agent assessments, test results, and conflicting review guidance,
+  project scope and coverage limits, and explicit functionality-test confirmation.
+  Include coverage, agent assessments, test results, and conflicting review guidance,
   the chosen approach, and the reason for that choice.
 
 Review → assess findings → record accepted deviations and fix a batch →

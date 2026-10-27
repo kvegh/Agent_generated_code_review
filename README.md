@@ -86,6 +86,26 @@ secrets, bypassing security/access controls, or presenting missing or failed
 mandatory test evidence as a successful review. Explicitly unsupported platforms
 are outside the declared scope rather than defects requiring implementation.
 
+### Project scope and limited test environments
+
+Define scope separately for each project from its intended purpose and actual
+requirements. Projects are not expected to handle every possible platform,
+deployment model, configuration, scale, or failure scenario. No particular
+hypervisor or platform is imposed by this policy; earlier KVM/VMware examples
+do not create additional implementation requirements.
+
+Plan proportionate verification using the test environments actually available.
+Document intended capabilities, the environments and scenarios tested, explicit
+exclusions, untested cases, and test-infrastructure limitations. Assess whether
+the available evidence is sufficient for the intended use and record accepted
+coverage gaps and their risks. Universal portability, an exhaustive test matrix,
+and 100% test coverage are not acceptance requirements. An untested case must not
+be presented as either verified support or proven incompatibility.
+
+Establish the acceptance scope before testing. The required core functionality
+and complete end-to-end workflow within that scope must still pass in the
+available environment. Acceptance is bounded by that scope and evidence.
+
 ## 2. Red Hat development guidance and security references
 
 Use the documentation for the deployed AAP release. For the current AAP 2.7
@@ -364,12 +384,14 @@ insufficient. Keep smoke tests focused, repeatable, and safe.
 
 Use meaningful unit, role, integration, failure/recovery, and idempotency tests
 as required by the full guide and the project's behavior. Tests should exercise
-outcomes and relevant failure cases. Run applicable supported-platform scenarios
-and document their actual coverage.
+outcomes and relevant failure cases. Select proportionate scenarios within the
+project's declared scope and available environment, and document actual coverage,
+untested cases, and accepted coverage gaps.
 
 **The last acceptance test for functional code or runtime configuration is
-always a complete end-to-end test through AAP.** Define its starting state,
-complete workflow, supported scenarios, expected outcomes, smoke checks, and
+always a complete end-to-end test through AAP within the project's declared
+acceptance scope and available test environment.** Define its starting state,
+complete workflow, required scenarios, expected outcomes, smoke checks, and
 preservation checks before launching it. Verify the final user-visible result,
 actual job completion, and absence of unintended effects.
 
@@ -456,9 +478,10 @@ The report must include:
 - Review scope, completion date, reviewer, policy/guide revisions, and the exact
   source and runtime/dependency baseline reviewed. Identify agent review scopes
   and any independent agent assessments of readability and simplicity.
-- The documented supported environment, explicit unsupported platforms, and
-  evidence that the documentation matches the implementation. A KVM-only
-  project, for example, must say so without implying VMware support.
+- The project's intended scope, environments and scenarios actually tested,
+  explicit exclusions, untested cases, test-environment limitations, and evidence
+  that the documentation matches the implementation. Explain why the coverage
+  is sufficient for acceptance and the risk of any accepted coverage gaps.
 - Findings, their consequences, fixes and implementation commits, fix batches,
   and verification results. Record the final disposition of every finding.
 - CoP and other required coverage, tool/validator completion, functionality and
@@ -490,12 +513,13 @@ Maintain a current README and `design_decisions_history.md` for every project.
 Explain purpose, prerequisites, dependencies, inputs/outputs, AAP/CaC setup,
 execution, tests, expected results, troubleshooting, recovery, and limitations.
 Check documentation against the codebase for accuracy and sufficient detail to
-set up, run, test, and recover the project in its supported environment. State
-the environment it was built for, supported hypervisor/platform and versions,
-AAP/EE baseline, prerequisites, assumptions, and explicit exclusions. For a
-KVM-only implementation, document KVM support and that VMware is unsupported;
-the review does not require adding another hypervisor. Treat unsupported and
-untested claims distinctly. Assess adequacy and usefulness, not document length.
+set up, run, test, and recover the project within its intended scope. State
+the environment it was built for, applicable platforms and versions, AAP/EE
+baseline, prerequisites, assumptions, and explicit exclusions. Distinguish
+intended capabilities from actual tested coverage, untested cases, and accepted
+limitations of the available test environment. The review does not require
+expanding the codebase to cover every possible scenario. Assess adequacy and
+usefulness, not document length.
 Record reasons and implementation commit IDs in the decision history; keep
 patches and secrets out of it. Update documentation with implementation changes.
 
