@@ -3,6 +3,24 @@
 This document records significant decisions, their rationale, and the commits
 that implement them.
 
+## Keep a dated completion report with each reviewed project
+
+Implementation commit: `835d2cf`.
+
+The owner requires a `Code_Review_YYYY-MM-DD.md` document in the repository
+actually reviewed after findings are fixed and functionality is verified.
+Keeping the report with that project makes its scope, fixes, tested revisions,
+and acceptance evidence available alongside the maintained code. The existing
+requirement for a successful restarted full review and final AAP end-to-end
+test remains in force before recording successful completion.
+
+The report must explain conflicting review approaches or guidance: which
+requirements contradicted each other, the affected context, the chosen approach,
+alternatives, rationale, and verification. Record explicitly when no conflicts
+were identified. Sensitive evidence remains outside public code repositories.
+The README, process diagram, and TLDR now include this requirement. Documentation
+checks passed; no successful review report was created for an unreviewed project.
+
 ## Fix findings in batches before functionality tests and a full review restart
 
 Implementation commit: `057d6f6`.
