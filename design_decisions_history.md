@@ -3,6 +3,32 @@
 This document records significant decisions, their rationale, and the commits
 that implement them.
 
+## Balance review effort against benefit and use agents for readability checks
+
+Implementation commit: `e4f4168`.
+
+The owner clarified that review acceptance does not require perfect conformance.
+Reviewers may accept low-impact deviations when the effort, added complexity,
+or regression risk of correction is disproportionate to the practical benefit.
+The dated report must explain each accepted deviation or known limitation,
+its impact, the benefit and cost of fixing it, and the reason for acceptance.
+Material decisions retain the existing authorization requirements, and mandatory
+functionality and final end-to-end evidence must still pass.
+
+The owner also requires explicit functionality-test confirmation in each review
+report and a check that project documentation sufficiently describes the actual
+supported environment. A KVM-only implementation does not need VMware support
+to pass review; its documentation must accurately state the boundary.
+
+Readability and simplicity are assessed by agents rather than requiring human
+verification. Additional independent agents may confirm or challenge the
+assessment; their scopes, findings, and disagreement resolutions are recorded.
+This sets the review method without launching reviews or delegating tasks now.
+
+The README, flowchart, report requirements, and TLDR were aligned. Documentation
+consistency, report fields, local links, code fences, and whitespace checks
+passed. No executable project content or deployed objects changed.
+
 ## Keep a dated completion report with each reviewed project
 
 Implementation commit: `835d2cf`.
