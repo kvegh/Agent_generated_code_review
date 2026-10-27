@@ -56,6 +56,30 @@ for a current AAP EE. Keep short explanatory comments as required below.
 The owner-selected repository name is retained without renaming it to match a
 different naming convention in the guide.
 
+### Evidence-based findings: do not invent issues
+
+Agents must not assume that defects exist because they are asked to review code
+or fix issues. Do not invent, exaggerate, or manufacture findings to produce
+changes, meet a finding count, or appear productive. **No significant findings**
+is a valid review outcome when supported by the required assessment and tests.
+
+For each finding, identify the affected code, the applicable requirement, the
+supporting evidence, and the practical impact within the project's declared
+scope. State uncertainty and distinguish confirmed defects, policy deviations,
+optional improvements, and unverified concerns. A hypothetical risk or an
+untested case must not be reported as an observed failure.
+
+Treat automated warnings as leads to investigate. Check them against the actual
+code, intended behavior, and supported AAP runtime before reporting a defect;
+record false positives with a concise reason. Preserve working code when a
+proposed change has no clear, worthwhile benefit. Do not expand the work into
+speculative refactoring, defensive features, or new test frameworks merely to
+have something to fix. Apply the proportionality rule below to real deviations.
+
+This requirement preserves all mandatory review and functionality checks. Report
+actual violations and missing evidence honestly; do not claim a pass for an
+unperformed check or hide a real issue to achieve a clean result.
+
 ### Proportionate improvements and accepted deviations
 
 The goal is useful, reliable automation for its documented environment, with

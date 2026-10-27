@@ -6,6 +6,11 @@ and apply every directive, recording evidence or a justified disposition.
 This overview does not replace either document.
 
 - **Correct behavior:** define the required outcome and preserve it during cleanup.
+- **Evidence-based findings:** agents must not assume defects exist because they
+  are asked to review or fix issues. Substantiate findings and their practical
+  impact; validate tool warnings and distinguish defects from optional ideas or
+  unverified concerns. Preserve working code without a worthwhile reason to
+  change it. No significant findings is a valid outcome after required checks.
 - **Proportionality:** aim for useful, reliable automation rather than 100%
   perfection. Fix findings where benefit justifies effort and risk. Record
   low-impact accepted deviations and known limitations with their reasons;
