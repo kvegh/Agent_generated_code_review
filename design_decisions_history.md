@@ -3,6 +3,25 @@
 This document records significant decisions, their rationale, and the commits
 that implement them.
 
+## Bound acceptance by each project's intended scope and available test environment
+
+Implementation commit: `39e4b8d`.
+
+The owner clarified that KVM was an example of a project boundary, not a
+workspace-wide platform requirement. Reviews must not demand code for every
+possible platform, deployment model, configuration, or scenario. Establish each
+project's acceptance scope from its actual purpose and requirements.
+
+Use the available test infrastructure for proportionate verification. Document
+the scenarios actually tested, exclusions, untested cases, limitations, and the
+risk of accepted coverage gaps. An untested case establishes neither verified
+support nor proven incompatibility. Mandatory functionality and a complete AAP
+end-to-end workflow still have to pass within the defined acceptance scope.
+
+README requirements, review-report fields, and the TLDR now express this general
+rule. Documentation consistency, scoped acceptance, local links, code fences,
+and whitespace checks passed; no executable content changed.
+
 ## Balance review effort against benefit and use agents for readability checks
 
 Implementation commit: `e4f4168`.
