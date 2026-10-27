@@ -3,6 +3,24 @@
 This document records significant decisions, their rationale, and the commits
 that implement them.
 
+## Link every supporting-code implementation to its documented justification
+
+Implementation commit: `87c1ad2`.
+
+The owner requires justification for project-authored non-Ansible code in the
+project documentation and short comments linking to that exact explanation.
+This applies to Python, PowerShell, shell, other languages, custom plugins,
+and embedded snippets. The rationale identifies the required capability,
+native Ansible or certified alternatives considered, their gap, and the reason
+the supporting implementation is appropriate.
+
+Comments at the implementation and its Ansible execution point provide the
+link while the documentation holds details, dependencies, limitations, and
+verification. Shared rationales may cover files with the same purpose to avoid
+duplicated explanations. The README and TLDR were updated and whitespace checks
+passed. Missing or stale justifications become review findings subject to the
+existing proportionality policy; no implementation review is claimed here.
+
 ## Bound acceptance by each project's intended scope and available test environment
 
 Implementation commit: `39e4b8d`.
