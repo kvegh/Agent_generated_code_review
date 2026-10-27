@@ -3,6 +3,22 @@
 This document records significant decisions, their rationale, and the commits
 that implement them.
 
+## Include useful future recommendations in completed review reports
+
+Implementation commit: `de6c48e`.
+
+The owner requested suggestions in outcome documentation, including creating
+new Ansible modules when justified or using additional code-checking tools.
+Reports now record the capability or coverage gap, expected benefit, effort,
+dependencies, maintenance/regression costs, and priority for each suggestion.
+Distinguish tools actually used from proposed tools and required fixes from
+optional improvements. Optional recommendations do not block acceptance of
+the verified scope and do not themselves authorize additional implementation.
+
+The README and TLDR contain the requirement. This documentation-only change
+passed whitespace checks and does not claim that suggested tools or modules
+were installed, implemented, or verified.
+
 ## Link every supporting-code implementation to its documented justification
 
 Implementation commit: `87c1ad2`.
