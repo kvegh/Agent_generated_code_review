@@ -22,6 +22,10 @@ This overview does not replace either document.
   Agents assess this; human verification is not required. Additional independent
   agents may confirm or challenge findings. Keep comments short; explain the
   reason, goal, and solution.
+- **Naming:** document and apply consistent names for variables, playbooks, roles,
+  tasks, handlers, and included files. Use CoP guidance and available lint/APME
+  checks. Weigh interface-breaking renames against their benefit and document
+  accepted historical deviations.
 - **Native Ansible:** prefer suitable native modules/roles over URI calls and
   external scripts. MCP calls are acceptable. Explain necessary alternatives.
 - **Supporting code:** justify every project-authored Python, PowerShell, shell,

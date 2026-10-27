@@ -182,6 +182,36 @@ environment, and review criteria. Record the agents' review scopes, concrete
 findings, and resolution of disagreements. Do not describe agent consensus as
 human verification or as functional-test evidence.
 
+### Consistent naming conventions
+
+Each project must document and consistently apply a naming scheme for variables,
+playbooks, roles, tasks, handlers, and included task files. Review it against the
+CoP naming-conventions and coding-style sections, strict linting, and the naming
+checks actually implemented in the selected APME version.
+
+- Variables use descriptive `snake_case` Python identifiers, avoid reserved
+  Ansible/Python names, and use consistent project/component prefixes. Role inputs
+  and internal variables follow the guide's role-prefix and internal-name rules.
+- Playbook names describe their action and purpose using a consistent word
+  order, separator, and extension. Task-file and role names follow their declared
+  conventions. Record a reason for historical numbering or other exceptions.
+- Name plays, tasks, blocks, and handlers clearly and consistently. Task names
+  use an initial capital and an imperative action; maintain useful component or
+  included-file prefixes and distinguish tasks with different purposes.
+
+The CoP guide supplies the full naming guidance. Relevant APME checks include
+`L024`/`L025` for task names, `L050` for variable format, `L074`/`L079` for role
+and role-variable naming, `L081` for numbered roles/playbooks, `L084` for included
+task prefixes, and `L097`/`L100`/`L101` for unique task and valid variable names.
+Validate actual rule coverage and target-runtime compatibility rather than
+assuming an automated check covers the entire convention.
+
+Apply the proportionality rule to migrations. Renaming a public variable,
+playbook, or AAP resource can break consumers or template references; weigh the
+benefit against that cost, preserve the intended interface where appropriate,
+and document accepted naming deviations. Code, examples, tests, documentation,
+and CaC references must agree on names that are changed.
+
 Keep playbooks easy to follow and roles focused. Remove duplication where it
 improves clarity. Avoid unnecessary wrappers, frameworks, configuration switches,
 fallback chains, nested logic, and speculative future features. Each check,
