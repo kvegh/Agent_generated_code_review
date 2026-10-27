@@ -3,6 +3,21 @@
 This document records significant decisions, their rationale, and the commits
 that implement them.
 
+## Make each project's naming conventions an explicit review criterion
+
+Implementation commit: `9f8c1ce`.
+
+The owner requested consistent naming for variables, playbooks, and tasks.
+The complete CoP guide already covers naming and coding style, and the inspected
+APME catalog implements several naming checks. The README now makes project
+conventions and their automated coverage explicit, including descriptive variable
+identifiers and prefixes, consistent playbook names, and clear task names.
+
+Apply the proportionality policy to historical names and public interfaces.
+Renames must have sufficient benefit to justify consumer, AAP-template, test,
+documentation, and CaC changes. Accepted naming deviations remain documented.
+The README and TLDR were updated and whitespace checks passed.
+
 ## Include useful future recommendations in completed review reports
 
 Implementation commit: `de6c48e`.
