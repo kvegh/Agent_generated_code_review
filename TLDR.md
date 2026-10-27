@@ -50,9 +50,14 @@ This overview does not replace either document.
   including the complete final end-to-end test.
 - **Documentation:** keep the README, decision history, and TLDR current. Complex
   workflows need a maintained visual process overview on GitHub Pages.
+- **Review report:** after a successful review, create `Code_Review_YYYY-MM-DD.md`
+  in the reviewed repository and link it from that project's README. Record
+  findings/fixes, tested revisions, coverage and test results, and any conflicting
+  review guidance, the chosen approach, and the reason for that choice.
 
 Review → collect findings → fix a batch → functionality tests → restart the
-full review → final full AAP end-to-end test → accept the exact tested revision.
+full review → final full AAP end-to-end test → write the report in the reviewed
+repository and accept the exact tested revision.
 Failed functionality tests stay in the fix-and-test cycle until they pass.
 Do not restart the complete review after each individual finding or edit.
 

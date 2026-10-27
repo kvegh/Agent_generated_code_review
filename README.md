@@ -367,7 +367,7 @@ flowchart TD
     D --> E[Check CaC and documentation; freeze acceptance revision]
     E --> F[Final complete AAP end-to-end test]
     F --> G{All requirements passed?}
-    G -->|Yes| H[Record evidence and accept tested revision]
+    G -->|Yes| H[Create dated report in reviewed repository and accept tested revision]
     G -->|No| I[Collect findings and fix a coherent batch]
     I --> J[Run functionality and regression tests]
     J --> K{Functionality passed?}
@@ -391,6 +391,42 @@ commands/job references, results, deprecations, timings, and remaining gaps.
 Store sensitive evidence outside public code repositories and publish sanitized
 summaries only. Do not claim acceptance while any required check is missing,
 failed, or unverified. Existing unrelated work must remain untouched.
+
+### Successful review report in the reviewed repository
+
+At the end of each successful review, create
+**`Code_Review_YYYY-MM-DD.md` in the root of the repository that was reviewed**,
+using the review completion date. For example, a review of the disconnected
+Windows project produces the report in that project's own repository. A report
+in this policy repository does not replace the reviewed project's report.
+
+Create the completed report after findings are fixed, functionality tests pass,
+and the restarted full review and final AAP end-to-end test succeed. Commit it
+with the reviewed project's documentation and link it from that project's
+README. Identify the exact functional revision that passed; a later commit
+containing only the report must not obscure which executable content was tested.
+
+The report must include:
+
+- Review scope, completion date, reviewer, policy/guide revisions, and the exact
+  source and runtime/dependency baseline reviewed.
+- Findings, their consequences, fixes and implementation commits, fix batches,
+  and verification results. Record the final disposition of every finding.
+- CoP and other required coverage, tool/validator completion, functionality and
+  regression tests, smoke/idempotency checks, and the final complete AAP
+  end-to-end result, with sanitized evidence references and relevant timings.
+- Any **contradictions between review approaches or guidance**. Identify the
+  conflicting sources and requirements, the affected context, the chosen
+  approach, the alternatives, and the reason for the choice. Explain how the
+  decision preserves functionality and meets the supported AAP baseline,
+  including verification and any required exception approval. If no conflicts
+  were identified, say so explicitly.
+- Approved exceptions, limitations, and the final acceptance conclusion. Required
+  checks that remain failed, missing, or unverified prevent a successful review.
+
+Keep the report sanitized under the sensitive-configuration rules above. Put
+raw sensitive evidence in protected external storage and reference only safe
+summaries from the committed report. Preserve previous completed review reports.
 
 ## 15. Documentation and process overview
 
