@@ -3,6 +3,22 @@
 This document records significant decisions, their rationale, and the commits
 that implement them.
 
+## Fix findings in batches before functionality tests and a full review restart
+
+Implementation commit: `057d6f6`.
+
+The owner clarified the order of correction and review: collect findings, fix
+multiple findings in a coherent batch, run functionality and regression tests,
+and restart the complete review only after functionality passes. Individual
+findings and edits do not each trigger an immediate full restart. Failed
+functionality tests stay in the diagnosis, fix, and test cycle until they pass.
+
+The final complete AAP end-to-end test remains mandatory in the restarted
+review. Targeted functionality checks establish that the correction works but
+do not close acceptance. README prose, the process diagram, and the TLDR now
+describe the same cycle. Documentation consistency, local links, code fences,
+and whitespace checks passed; no executable content or deployed objects changed.
+
 ## Define the review requirements and acceptance cycle
 
 Implementation commit: `7264129`.
