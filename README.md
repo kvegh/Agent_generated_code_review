@@ -210,6 +210,35 @@ operations. If automation itself needs MCP, declare and reproduce its runtime,
 credentials, permissions, and failure handling. A necessary direct API call or
 script must have a documented reason and remain small, testable, and protected.
 
+### Justify supporting code in documentation and linked comments
+
+Every use of project-authored non-Ansible code must have an explicit
+justification in the project's documentation. This includes Python, PowerShell,
+shell, JavaScript, custom modules/plugins/filters, and embedded snippets or
+commands within playbooks and templates.
+
+Explain the required capability, the suitable native Ansible modules or certified
+content considered, why they are insufficient for this use, and why the chosen
+supporting implementation is proportionate. State its dependencies, relevant
+limitations, and how its functionality is verified. A concise rationale may
+cover several files sharing the same purpose; separate distinct purposes.
+
+Add a short comment at the supporting implementation and its Ansible execution
+point stating the reason and **linking to the documentation section containing
+the justification**. Use a stable repository-relative path and section anchor,
+or a canonical documentation URL. For example, a script-header comment can say:
+
+```text
+# Reason: this operation needs an interface the selected module does not expose.
+# Justification: [API gap](../docs/implementation-decisions.md#api-gap).
+```
+
+This is an illustrative link; each project must supply its actual documentation.
+Verify that the rationale applies to the current implementation and module
+versions and that the links resolve. Keep comments short and put the detail in
+the linked documentation. Assess missing or obsolete justification as a review
+finding and record any accepted deviation under the proportionality policy.
+
 ## 6. Idempotency, failure handling, and recovery
 
 Avoid non-idempotent modules and code whenever an idempotent solution exists.

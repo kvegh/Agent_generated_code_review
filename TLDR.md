@@ -24,6 +24,10 @@ This overview does not replace either document.
   reason, goal, and solution.
 - **Native Ansible:** prefer suitable native modules/roles over URI calls and
   external scripts. MCP calls are acceptable. Explain necessary alternatives.
+- **Supporting code:** justify every project-authored Python, PowerShell, shell,
+  custom-plugin, or other non-Ansible implementation, including embedded snippets,
+  in project documentation. Short comments at the implementation and its Ansible
+  execution point must link to the specific justification section.
 - **Certified content:** use certified collections wherever possible. Explain
   validated, community, and custom alternatives when certified content cannot
   meet the need.
