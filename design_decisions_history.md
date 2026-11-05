@@ -3,6 +3,28 @@
 This document records significant decisions, their rationale, and the commits
 that implement them.
 
+## Require certified-first analysis of helpers and embedded code
+
+Implementation commit: `60a9ecaa2bb2539609b8f6a239e61da591e30ed6`.
+
+The owner requested explicit review of helpers in any language, custom Ansible
+modules/plugins, and executable code embedded in YAML. Existing documentation
+justifications alone did not make actual source analysis and simplification
+decisions explicit enough.
+
+Reviews now inventory implementations and callers, explain behavior and effects,
+check applicable certified capabilities and supported versions first, and record
+replace, simplify, retain-with-justification, or remove decisions. Reviewers must
+assess practical module/role-based YAML replacements without treating relocation
+to another file as simplification or replacing clear helpers with convoluted
+YAML. Readability and clean code remain primary criteria.
+
+The README, mandatory report fields, and TLDR now require this assessment,
+including absent code and coverage gaps. Linked rationale and proportionality
+rules are preserved. Independent wording review and focused documentation checks
+passed. No project implementation was reviewed, executed, or accepted by this
+documentation update; no tooling or runtime configuration changed.
+
 ## Require evidence and prohibit invented review findings
 
 Implementation commit: `a12bae9`.
