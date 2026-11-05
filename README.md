@@ -264,6 +264,51 @@ operations. If automation itself needs MCP, declare and reproduce its runtime,
 credentials, permissions, and failure handling. A necessary direct API call or
 script must have a documented reason and remain small, testable, and protected.
 
+### Mandatory analysis of helpers, custom extensions, and embedded code
+
+Every review must inventory and inspect project-authored supporting code, even
+when YAML playbooks are the main deliverable. Cover helper files in **any
+language**, custom Ansible modules and plugins (including action, filter,
+lookup, inventory, and callback plugins), shared module utilities, and executable
+snippets embedded in playbooks, task files, or templates. Include inline Python,
+PowerShell, shell, JavaScript, heredocs, and code generated or copied by tasks.
+Trace the relevant project callers to the actual implementation; a filename,
+file extension, lint result, or existing justification is not source review.
+
+For every distinct helper, extension, or embedded block, record its location and
+Ansible caller, purpose, inputs/outputs, dependencies, execution context, and
+meaningful side effects. Review its behavior, idempotency, error handling, and
+sensitive-data handling as well as its readability. Items sharing a purpose may
+share an assessment when the covered locations and differences remain clear.
+
+**Check applicable Red Hat Ansible Certified Content Collections first** for
+the capability being implemented. Compare actual modules, roles, or plugins and
+their supported versions with the required behavior. Record the suitable
+alternative or concrete capability/version gap, using authoritative references
+or current verified project evidence. Do not infer certification from a namespace
+or presence in private automation hub. Consider ordinary `ansible.builtin`
+utilities where appropriate; justify community or custom alternatives.
+
+Give each item a reasoned disposition: **replace with certified/native content,
+simplify, retain with justification, or remove** if unused or redundant. Explain
+whether each custom plugin/module is genuinely necessary, what it does, and why
+existing content cannot provide that behavior. Provide a practical,
+behavior-preserving replacement plan or a specific retention rationale.
+
+For embedded executable code, explicitly assess how to replace it with readable
+declarative YAML tasks using suitable modules or roles. Merely moving the same
+code into a helper file or custom plugin does not establish that it is needed
+or reduce its complexity. When supporting code remains necessary, keep it small,
+focused, clearly named, documented, and in a location that makes it easiest to
+understand and maintain. Do not replace a clear necessary helper with convoluted
+YAML just to reduce the non-YAML line count. Clean code and readability are
+primary criteria; assess practical benefit under the proportionality policy.
+
+Include this analysis in the review report. Explicitly state when no supporting
+or embedded code exists; identify any uninspected implementation or unresolved
+alternative as a coverage gap. Do not invent findings or claim that the analysis
+passed because the relevant files were merely listed or acknowledged as read.
+
 ### Justify supporting code in documentation and linked comments
 
 Every use of project-authored non-Ansible code must have an explicit
@@ -567,6 +612,11 @@ The report must include:
   is sufficient for acceptance and the risk of any accepted coverage gaps.
 - Findings, their consequences, fixes and implementation commits, fix batches,
   and verification results. Record the final disposition of every finding.
+- The [supporting-code analysis](#mandatory-analysis-of-helpers-custom-extensions-and-embedded-code):
+  helpers in every language, custom modules/plugins, and embedded code, with
+  locations/callers, behavior, certified/native alternatives and concrete gaps,
+  necessity decisions, and practical YAML simplification or retention rationale.
+  State when none exists and disclose unreviewed code or unresolved coverage.
 - CoP and other required coverage, tool/validator completion, functionality and
   regression tests, smoke/idempotency checks, and the final complete AAP
   end-to-end result, with sanitized evidence references and relevant timings.

@@ -33,13 +33,21 @@ This overview does not replace either document.
   accepted historical deviations.
 - **Native Ansible:** prefer suitable native modules/roles over URI calls and
   external scripts. MCP calls are acceptable. Explain necessary alternatives.
-- **Supporting code:** justify every project-authored Python, PowerShell, shell,
-  custom-plugin, or other non-Ansible implementation, including embedded snippets,
-  in project documentation. Short comments at the implementation and its Ansible
-  execution point must link to the specific justification section.
-- **Certified content:** use certified collections wherever possible. Explain
-  validated, community, and custom alternatives when certified content cannot
-  meet the need.
+- **Supporting-code analysis:** inventory and inspect helpers in any language,
+  custom Ansible modules/plugins, and code embedded in YAML or templates. Explain
+  what each does, where it is called, its effects, and whether it is necessary.
+  Report replace/simplify/retain/remove decisions and any unreviewed coverage.
+- **YAML simplification:** assess readable module/role-based YAML replacements
+  for embedded executable code. Moving code to another file alone does not
+  justify it or simplify it. Retain small necessary helpers when they are clearer
+  than convoluted YAML; clean code and readability are primary criteria.
+- **Supporting-code rationale:** justify every project-authored non-Ansible
+  implementation in project documentation. Short comments at the implementation
+  and its Ansible execution point must link to the specific justification section.
+- **Certified content first:** check applicable certified collections before
+  accepting custom implementations. Verify actual capability and supported
+  versions; explain concrete gaps before validated, community, or custom
+  alternatives. A namespace or private hub presence does not prove certification.
 - **Idempotency:** avoid non-idempotent operations where possible; verify repeat
   execution, actual state, accurate change reporting, and recovery.
 - **Security:** keep credentials and all sensitive environment values outside
