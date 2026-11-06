@@ -3,6 +3,27 @@
 This document records significant decisions, their rationale, and the commits
 that implement them.
 
+## Require automated functional tests against deployed software
+
+Implementation commit: `25a20cb9b0f5d66c8c5954edc410f5f5982e6b0d`.
+
+The owner requested automated functionality testing of deployed software in each
+project. Reviews now require maintained, version-controlled tests against real
+deployments and representative core workflows/integration outcomes, with a
+documented command or existing job, expected results and machine-detectable
+pass/fail. Builds, mocks, health probes or running processes alone cannot prove
+deployed functionality.
+
+Tests run as authorized post-deployment validation, use safe repeatable data,
+and evolve with functionality. Reuse existing tools and proportionate scenarios;
+unavailable environments leave functionality explicitly unverified. Projects
+that deploy no software may explain non-applicability. Existing full AAP
+end-to-end acceptance and approval boundaries remain required.
+
+The README and TLDR agree; independent wording review and focused documentation
+checks passed. This policy update adds no project tests, framework, deployment
+or runtime configuration and does not claim live functionality was tested.
+
 ## Keep initial designs simple and consult before adding complexity
 
 Implementation commit: `c240da27a74842433ea4725a69a55388c841cd2a`.
