@@ -540,6 +540,33 @@ outcomes and relevant failure cases. Select proportionate scenarios within the
 project's declared scope and available environment, and document actual coverage,
 untested cases, and accepted coverage gaps.
 
+### Automated functional tests against deployed software
+
+Every project that deploys software must version-control and maintain repeatable
+automated functional tests against actual deployed instances. Cover representative
+core workflows and observable integration outcomes within the project's scope.
+Builds, mocked unit tests, running processes, and health/readiness checks alone
+are insufficient evidence that the deployed software works.
+
+Document a simple test command or existing job in the project's README, including
+prerequisites, the authorized target, protected input sources, and expected
+outcomes. Tests must produce a clear, machine-detectable pass/fail result and be
+safe to repeat. Use owned test data with repeatable setup and safe cleanup;
+preserve unrelated data and keep sensitive inputs and evidence protected.
+
+Run the relevant tests as authorized post-deployment validation and maintain them
+alongside functionality changes. Reuse existing tools and keep scenarios small
+and meaningful. Do not introduce speculative coverage matrices, new frameworks,
+or components without the required owner consultation. Missing access or a test
+environment leaves the affected functionality explicitly unverified, not passed.
+Documentation-only projects and projects that deploy no software may record this
+requirement as not applicable with a reason.
+
+These tests supplement the mandatory final full AAP end-to-end acceptance below;
+they do not replace it or grant additional deployment, testing, or access authority.
+
+### Final end-to-end acceptance
+
 **The last acceptance test for functional code or runtime configuration is
 always a complete end-to-end test through AAP within the project's declared
 acceptance scope and available test environment.** Define its starting state,

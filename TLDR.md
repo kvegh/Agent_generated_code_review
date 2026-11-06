@@ -81,6 +81,15 @@ This overview does not replace either document.
 - **Tests:** create smoke tests after provisioning; verify behavior, idempotency,
   and relevant failure/recovery scenarios within the declared scope and available
   test environment. Record the evidence and coverage limits.
+- **Deployed functional tests:** each software-deploying project must maintain
+  version-controlled, repeatable automated tests of core workflows and integration
+  outcomes against actual deployed instances. Document the command/job, prerequisites,
+  authorized target, protected inputs and expected results in its README. Require
+  machine-detectable pass/fail and safe owned test data; run relevant tests as
+  authorized after deployment and maintain them with functionality. Reuse existing
+  tools; builds, mocks and health checks alone are insufficient. Disclose unverified
+  functionality when access/environment is missing; non-deploying projects may
+  justify not applicable. Preserve scope, consultation and approval requirements.
 - **Final test:** always finish functional acceptance with the complete AAP
   end-to-end test within that scope and test environment. Assess findings and
   record accepted deviations; fix the selected findings in batches. After the
