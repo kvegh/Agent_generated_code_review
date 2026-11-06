@@ -110,6 +110,30 @@ secrets, bypassing security/access controls, or presenting missing or failed
 mandatory test evidence as a successful review. Explicitly unsupported platforms
 are outside the declared scope rather than defects requiring implementation.
 
+### Simple design from the first draft
+
+Avoid overengineering from the start: brainstorming, initial concepts, design,
+plans, specifications, and first drafts must use a clear, simple setup that
+meets the approved goal. Do not build speculative features, optional add-ons,
+frameworks, or architectural components into the assumed baseline for later use.
+
+If additional features, add-ons, architectural components, or engineering
+complexity beyond the agreed baseline appear necessary, explain the concrete
+need, the simplest adequate alternative, and the tradeoffs in delivery effort,
+runtime behavior, and ongoing maintenance. **Consult the owner and wait for
+their direction before adopting the addition into the selected design or
+implementing it.** Calling an addition necessary does not authorize it.
+Optional ideas may be presented for discussion, clearly marked as proposals;
+do not silently treat them as approved requirements in a draft.
+
+Apply this rule to design documents, implementation, and review recommendations.
+Check for unjustified complexity and unapproved additions, and record actual
+findings using the existing evidence and proportionality requirements. Preserve
+required functionality, readable and maintainable code, relevant verification,
+and reasonable security. Existing approvals remain valid; do not ask again for
+already authorized choices or turn routine details within an approved design
+into new architectural decisions.
+
 ### Project scope and limited test environments
 
 Define scope separately for each project from its intended purpose and actual

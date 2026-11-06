@@ -15,6 +15,12 @@ This overview does not replace either document.
   perfection. Fix findings where benefit justifies effort and risk. Record
   low-impact accepted deviations and known limitations with their reasons;
   mandatory functionality/end-to-end tests must still pass.
+- **Simple designs from the first draft:** keep brainstorming, plans, designs
+  and drafts clear and simple for the approved goal. Before adopting added
+  features, add-ons, architectural components or engineering complexity, explain
+  the need, simplest alternative and tradeoffs; consult the owner and wait for
+  direction, even when the addition seems necessary. Label optional proposals
+  clearly. Preserve existing approvals and routine work within the agreed design.
 - **Project scope and test limits:** define each project's intended use and
   verify it using the available test environment. Universal platform support,
   every possible scenario, and 100% test coverage are not required. Document
