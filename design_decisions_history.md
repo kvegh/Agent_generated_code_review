@@ -3,6 +3,25 @@
 This document records significant decisions, their rationale, and the commits
 that implement them.
 
+## Keep initial designs simple and consult before adding complexity
+
+Implementation commit: `c240da27a74842433ea4725a69a55388c841cd2a`.
+
+The owner clarified that avoiding overengineering starts with brainstorming,
+initial design and first drafts. A clear, simple setup for the approved goal
+must be the baseline, rather than an elaborate draft to simplify later.
+
+Added features, add-ons, architectural components or engineering complexity
+require explanation of the concrete need, simplest alternative and tradeoffs,
+then consultation and owner direction before adoption or implementation, even
+when the agent considers them necessary. Clearly marked proposals may still be
+discussed. Existing approvals and routine details within the agreed design remain
+valid; functionality, clean code, relevant checks and security remain required.
+
+The README and TLDR apply the rule to design, implementation and review advice.
+Independent wording review and focused documentation checks passed. No project
+design or implementation was reviewed or changed by this policy update.
+
 ## Require certified-first analysis of helpers and embedded code
 
 Implementation commit: `60a9ecaa2bb2539609b8f6a239e61da591e30ed6`.
